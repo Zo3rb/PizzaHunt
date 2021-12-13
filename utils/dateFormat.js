@@ -96,3 +96,5 @@ module.exports = (
 
   return formattedTimeStamp;
 };
+
+module.exports = addDateSuffix;

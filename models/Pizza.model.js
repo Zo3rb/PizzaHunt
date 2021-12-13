@@ -11,9 +11,21 @@ const PizzaSchema = new mongoose.Schema({
     type: String,
     default: 'Large'
   },
-  toppings: []
+  toppings: [],
+  comments: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Comment'
+  }]
 }, {
-  timestamps: true
+  timestamps: true,
+  toJSON: {
+      virtuals: true,
+    },
+    id: false
+});
+
+PizzaSchema.virtual('commentCount').get(function() {
+  return this.comments.length;
 });
 
 const PizzaModel = mongoose.model('Pizza', PizzaSchema);

@@ -3,7 +3,7 @@ const { Pizza } = require("../models");
 const pizzaController = {
   async getAllPizza(req, res) {
     try {
-      const pizzas = await Pizza.find({});
+      const pizzas = await Pizza.find({}).populate('comments').sort({_id: -1});
       res.json({
         message: "Successed",
         data: pizzas,
@@ -14,7 +14,7 @@ const pizzaController = {
   },
   async getPizzaById(req, res) {
     try {
-      const pizza = await Pizza.findById(req.params.id);
+      const pizza = await Pizza.findById(req.params.id).populate('comments');
       if (!pizza)
         return res
           .status(404)
