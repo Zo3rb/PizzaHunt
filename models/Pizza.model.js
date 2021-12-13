@@ -25,7 +25,7 @@ const PizzaSchema = new mongoose.Schema({
 });
 
 PizzaSchema.virtual('commentCount').get(function() {
-  return this.comments.length;
+  return this.comments.reduce((total, comment) => total + comment.replies.length + 1, 0);
 });
 
 const PizzaModel = mongoose.model('Pizza', PizzaSchema);

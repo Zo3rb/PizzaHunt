@@ -22,7 +22,7 @@ const commentController = {
       if(!commentToDelete) return res.status(404).json({message: "Comment Was not found With this ID"});
       const pizzaCommented = await Pizza.findOneAndUpdate(
               {_id: req.params.pizzaId},
-              {$pull: {comments: req.params.commentId}},
+              {$pull: {comments: {_id: req.params.commentId}}},
               {new: true}
             );
       if(!pizzaCommented) return res.status(404).json({message: "Pizza Was not found With this ID"});
@@ -30,6 +30,25 @@ const commentController = {
     } catch (error) {
       res.status(500).json(error.message);
     }
+  },
+  async addReply(req, res) {
+    try {
+      const commentReplied = await Comment.findOneAndUpdate(
+        {_id: req.params.commentId},
+        {$push: {replies: req.body}},
+        {new: true}
+      );
+      if(!commentReplied) return res.status(404).json({message: "Comment Was not Found with this ID"});
+      res.json(commentReplied);
+    } catch (error) {
+      res.status(500).json(error.message);
+    }
+  },
+  async removeReply(req, res) {
+    const replyRemoved = await Comment.findOneAndUpdate(
+      {_id: req.params.commentId},
+      {$pull: {replies: {replyId: req.params.replyId}}}
+    )
   }
 }
 
